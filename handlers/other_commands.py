@@ -32,12 +32,19 @@ async def command_help(message: types.Message):
 @rate_limit(limit=3)
 @dp.message_handler(CommandStart())
 async def command_start(message: types.Message):
-    text = f'Привет, {message.from_user.full_name}! \n\nЯ помогу найти тебе любую книгу!😇\n' \
-           f'Чтобы начать, пришли мне название книги 📖\n\n' \
-           f'Я также могу производить поиск по ФИО автора или названию книжной серии ☺\n' \
-           f'Ты можешь узнать больше обо мне здесь 👉 /help\n'
+    user = await db.get_user(message.from_user.id)
+
+    if not user:
+        text = 'Работа данного бота приостановлена. Если у вас остались вопросы, то обратитесь к владельцу бота.'
+
+    else:    
+        text = f'Привет, {message.from_user.full_name}! \n\nЯ помогу найти тебе любую книгу!😇\n' \
+            f'Чтобы начать, пришли мне название книги 📖\n\n' \
+            f'Я также могу производить поиск по ФИО автора или названию книжной серии ☺\n' \
+            f'Ты можешь узнать больше обо мне здесь 👉 /help\n'
     await message.answer(text)
-    await db.add_user(user=message.from_user.full_name, telegram_id=message.from_user.id)
+    
+    # await db.add_user(user=message.from_user.full_name, telegram_id=message.from_user.id)
 
 
 @dp.message_handler(Command('rating'))

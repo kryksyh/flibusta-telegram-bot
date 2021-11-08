@@ -100,6 +100,10 @@ class Database:
         count = await self.execute('SELECT count(*) FROM users', fetchval=True)
         return count
 
+    async def get_user(self, telegram_id):
+        user = await self.execute(f"SELECT * FROM users WHERE telegram_id = '{telegram_id}'", fetchval=True)
+        return user
+
     async def select_all_books(self):
         count = await self.execute('SELECT count(*) FROM books', fetchval=True)
         return count
